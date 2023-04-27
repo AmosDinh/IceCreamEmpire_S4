@@ -20,13 +20,18 @@ CREATE TABLE IF NOT EXISTS tour (
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     date DATE NOT NULL,
+    -- it is possible to keep a tour even when the operating vendor, vehicle or neighborhood is deleted
     vendor_id INT,
     vehicle_id INT,
     neighborhood_id INT,
-    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendor (vendor_id),
-    FOREIGN KEY (vehicle_id) REFERENCES Vehicle (vehicle_id),
-    FOREIGN KEY (neighborhood_id) REFERENCES Neighborhood (neighborhood_id)
+    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendor (vendor_id) ON DELETE
+    SET NULL,
+        FOREIGN KEY (vehicle_id) REFERENCES Vehicle (vehicle_id) ON DELETE
+    SET NULL,
+        FOREIGN KEY (neighborhood_id) REFERENCES Neighborhood (neighborhood_id) ON DELETE
+    SET NULL
 );
+-- TODO
 CREATE TABLE IF NOT EXISTS Flavor (
     flavor_id INT PRIMARY KEY NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -44,12 +49,12 @@ CREATE TABLE IF NOT EXISTS Content (
         END
     ) FOREIGN KEY (flavor_id) REFERENCES Flavor (flavor_id) ON DELETE CASCADE
 );
-CREATE TABLE IF NOT EXISTS Orders (
-    id INT PRIMARY KEY,
-    tour_id INT,
-    time TIME,
-    payment_type VARCHAR(255),
-    FOREIGN KEY (tour_id) REFERENCES Tours (id)
+CREATE TABLE IF NOT EXISTS Order (
+    order_id INT PRIMARY KEY NOT NULL,
+    tour_id INT NOT NULL,
+    time TIME NOT NULL,
+    payment_type VARCHAR(255) NOT NULL,
+    FOREIGN KEY (tour_id) REFERENCES Tours (tour_id)
 );
 CREATE TABLE IF NOT EXISTS OrderDetails (
     id INT PRIMARY KEY,
