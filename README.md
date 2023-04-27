@@ -27,7 +27,7 @@ powershell
 On Linux:
 
 ```
-source venv\bin\activate
+source venv/bin/activate
 ```
 
 After activation

@@ -1,3 +1,5 @@
+import plotly.express as px 
+import numpy as np
 import streamlit as st
 from streamlit import session_state
 
@@ -24,6 +26,12 @@ def main():
         input3 = st.text_input("Input 3")
         submit_button = st.form_submit_button(label="Submit")
 
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
+
+    fig = px.scatter(x=x, y=y)
+    st.plotly_chart(fig)
+    
     if submit_button:
         session_state.data[session_state.page].append([input1, input2, input3])
 
