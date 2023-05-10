@@ -1,83 +1,103 @@
 -- currently used version under construction
+DROP TABLE IF EXISTS IceCreamVendors CASCADE;
+DROP TABLE IF EXISTS Neighborhoods CASCADE;
+DROP TABLE IF EXISTS Vehicles CASCADE;
+DROP TABLE IF EXISTS Tours CASCADE;
+DROP TABLE IF EXISTS Flavors CASCADE;
+DROP TABLE IF EXISTS Contents CASCADE;
+DROP TABLE IF EXISTS Orders CASCADE;
+DROP TABLE IF EXISTS OrderDetails CASCADE;
+DROP TABLE IF EXISTS Warehouses CASCADE;
+DROP TABLE IF EXISTS WarehouseStoresFlavors CASCADE;
 
-CREATE TABLE IF NOT EXISTS IceCreamVendor (
-    vendor_id INT PRIMARY KEY NOT NULL,
-    forename VARCHAR(255) NOT NULL,
-    lastname VARCHAR(255) NOT NULL,
-    salary DECIMAL(10, 2) NOT NULL
+
+CREATE TABLE IceCreamVendors (
+    vendor_id INT NOT NULL, 
+    forename VARCHAR(32)NOT NULL,
+    lastname VARCHAR(32)NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (vendor_id)
 );
-CREATE TABLE IF NOT EXISTS Neighborhood (
-    neighborhood_id INT PRIMARY KEY NOT NULL,
-    name VARCHAR(255) NOT NULL,
+CREATE TABLE Neighborhoods (
+    Neighborhoods_id INT NOT NULL,
+    name VARCHAR(32)NOT NULL,
     distance_to_headquarter_km DECIMAL(10, 3) NOT NULL,
-    area_sqkm DECIMAL(10, 2) NOT NULL
+    area_sqkm DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (Neighborhoods_id)
 );
-CREATE TABLE IF NOT EXISTS Vehicle (
-    vehicle_id INT PRIMARY KEY NOT NULL,
-    type VARCHAR(255) NOT NULL,
-    storage_capacity INT NOT NULL -- measured in scoops
+CREATE TABLE Vehicles (
+    Vehicles_id INT NOT NULL,
+    type VARCHAR(32)NOT NULL,
+    storage_capacity INT NOT NULL, -- measured in scoops
+    PRIMARY KEY (Vehicles_id)
 );
-CREATE TABLE IF NOT EXISTS tour (
-    tour_id INT PRIMARY KEY NOT NULL,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
-    date DATE NOT NULL,
-    -- it is possible to keep a tour even when the operating vendor, vehicle or neighborhood is deleted
+CREATE TABLE  Tours (
+    Tours_id INT NOT NULL,
+    start_datetime TIMESTAMP NOT NULL,
+    end_datetime TIMESTAMP NOT NULL,
+    -- it is possible to keep a Tours even when the operating vendor, Vehicles or Neighborhoods is deleted
     vendor_id INT,
-    vehicle_id INT,
-    neighborhood_id INT,
-    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendor (vendor_id) ON DELETE
+    Vehicles_id INT,
+    Neighborhoods_id INT,
+    PRIMARY KEY (Tours_id),
+    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendors (vendor_id) ON DELETE
     SET NULL,
-        FOREIGN KEY (vehicle_id) REFERENCES Vehicle (vehicle_id) ON DELETE
+        FOREIGN KEY (Vehicles_id) REFERENCES Vehicles (Vehicles_id) ON DELETE
     SET NULL,
-        FOREIGN KEY (neighborhood_id) REFERENCES Neighborhood (neighborhood_id) ON DELETE
+        FOREIGN KEY (Neighborhoods_id) REFERENCES Neighborhoods (Neighborhoods_id) ON DELETE
     SET NULL
 );
 -- TODO
-CREATE TABLE IF NOT EXISTS Flavor (
-    flavor_id INT PRIMARY KEY NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    base_price_per_scoop DECIMAL(10, 2) NOT NULL
+CREATE TABLE  Flavors (
+    flavors_id INT NOT NULL,
+    name VARCHAR(32) NOT NULL,
+    base_price_per_scoop DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (flavors_id)
 );
-CREATE TABLE IF NOT EXISTS Content (
-    content_id INT PRIMARY KEY NOT NULL,
-    flavor_id INT NOT NULL,
+CREATE TABLE Contents (
+    flavors_id INT,
     calories INT NOT NULL,
-    basis VARCHAR(255) NOT NULL,
-    isvegan BOOLEAN AS (
+    basis VARCHAR(32) NOT NULL,
+    isvegan BOOLEAN GENERATED ALWAYS AS (
         CASE
-            WHEN content = 'milk' THEN false
+            WHEN basis = 'milk' THEN false
             ELSE true
         END
-    ) FOREIGN KEY (flavor_id) REFERENCES Flavor (flavor_id) ON DELETE CASCADE
+    ) STORED,
+    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id) ON DELETE CASCADE,
+    PRIMARY KEY (flavors_id)
 );
-CREATE TABLE IF NOT EXISTS Order (
-    order_id INT PRIMARY KEY NOT NULL,
-    tour_id INT NOT NULL,
-    time TIME NOT NULL,
-    payment_type VARCHAR(255) NOT NULL,
-    FOREIGN KEY (tour_id) REFERENCES Tours (tour_id)
+
+CREATE TABLE  Orders (
+    order_id INT NOT NULL,
+    Tours_id INT NOT NULL,
+    order_datetime TIMESTAMP NOT NULL,
+    payment_type VARCHAR(32) NOT NULL,
+    FOREIGN KEY (Tours_id) REFERENCES Tours (Tours_id),
+    PRIMARY KEY (order_id)
 );
-CREATE TABLE IF NOT EXISTS OrderDetails (
-    id INT PRIMARY KEY,
+
+CREATE TABLE  OrderDetails (
     order_id INT,
-    flavor_id INT,
+    flavors_id INT,
     amount INT,
     price DECIMAL(10, 2),
     discount DECIMAL(10, 2),
-    FOREIGN KEY (order_id) REFERENCES Orders (id),
-    FOREIGN KEY (flavor_id) REFERENCES Flavors (id)
+    FOREIGN KEY (order_id) REFERENCES Orders (order_id),
+    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id),
+    PRIMARY KEY (order_id, flavors_id)
 );
-CREATE TABLE IF NOT EXISTS Warehouses (
-    id INT PRIMARY KEY,
-    address VARCHAR(255),
+CREATE TABLE  Warehouses (
+    warehouse_id INT PRIMARY KEY,
+    address VARCHAR(30),
     capacity DECIMAL(10, 2)
 );
-CREATE TABLE IF NOT EXISTS WarehouseFlavorStock (
+CREATE TABLE  WarehouseStoresFlavors (
     warehouse_id INT,
-    flavor_id INT,
-    amount INT,
-    PRIMARY KEY (warehouse_id, flavor_id),
-    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (id),
-    FOREIGN KEY (flavor_id) REFERENCES Flavors (id)
+    flavors_id INT,
+    amount INT NOT NULL,
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id),
+    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id),
+    PRIMARY KEY (warehouse_id, flavors_id)
+   
 );
