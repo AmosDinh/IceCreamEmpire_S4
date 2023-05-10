@@ -2,10 +2,12 @@ version: '3.1'
 
 services:
 
-  frotend:
-    build: ./src/frontend
-    ports:
-      - 80:8501
+  # frotend:
+  #   build: ./src/frontend
+  #   ports:
+  #     - 80:8501
+  #   networks:
+  #     - postgres-network
 
   database:
     image: 'postgres:latest'
@@ -13,13 +15,14 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=projectsmoothies
+      - POSTGRES_PASSWORD=icecreamempire_s4
       - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
     networks:
       - postgres-network
     volumes:
       - ./db-data/:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 #   pgadmin:
 #     image: 'dpage/pgadmin4:latest'
