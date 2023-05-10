@@ -1,3 +1,5 @@
+-- currently used version under construction
+
 CREATE TABLE IF NOT EXISTS IceCreamVendor (
     vendor_id INT PRIMARY KEY NOT NULL,
     forename VARCHAR(255) NOT NULL,
