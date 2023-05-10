@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+
+  frotend:
+    build: ./src/frontend
+    ports:
+      - 80:8501
+
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=projectsmoothies
+      - POSTGRES_DB=postgres
+    networks:
+      - postgres-network
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+#   pgadmin:
+#     image: 'dpage/pgadmin4:latest'
+#     ports:
+#       - 15433:80
+#     env_file:
+#       - .env
+#     networks:
+#       - postgres-network
+#     depends_on:
+#       - database
+#     volumes:
+#       - ./pgadmin-data/:/var/lib/pgadmin
+
+networks: 
+  postgres-network:
+    driver: bridge

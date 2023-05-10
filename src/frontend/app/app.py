@@ -31,6 +31,9 @@ def main():
 
     fig = px.scatter(x=x, y=y)
     st.plotly_chart(fig)
+
+    fig = px.scatter(x=x, y=y)
+    st.plotly_chart(fig)
     
     if submit_button:
         session_state.data[session_state.page].append([input1, input2, input3])

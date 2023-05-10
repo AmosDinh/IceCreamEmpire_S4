@@ -1,2 +1,6 @@
 .venv
 venv
+env
+/db-data/
+/pgadmin-data/
+.vscode
