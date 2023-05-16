@@ -181,6 +181,7 @@ VALUES (1, 1, 100),
     (2, 3, 300),
     (3, 1, 150),
     (3, 2, 250);
+    
 INSERT INTO VehicleStoresFlavors (vehicle_id, flavor_id, amount)
 VALUES (2, 1, 100),
     (2, 2, 200),
