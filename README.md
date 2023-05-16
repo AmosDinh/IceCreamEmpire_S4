@@ -15,7 +15,7 @@ On windows:
 cmd
 
 ```
-venv\bin\activate.bat
+venv\Scripts\activate.bat  
 ```
 
 powershell
