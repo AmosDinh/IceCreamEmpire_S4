@@ -2,9 +2,9 @@ import psycopg2
 
 PGHOST = 'localhost'
 PGPORT = "5432"
-PGDATABASE = 'postgres'
+PGDATABASE = 'IceCreamEmpire'
 PGUSER = 'postgres'
-PGPASSWORD = 'icecreamempire_s4'
+PGPASSWORD = '1234'
 
 
 class Queries:

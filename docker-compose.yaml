@@ -2,41 +2,40 @@ version: '3.1'
 
 services:
 
-  # frotend:
-  #   build: ./src/frontend
-  #   ports:
-  #     - 80:8501
-  #   networks:
-  #     - postgres-network
+  frotend:
+    build: ./src/frontend
+    ports:
+      - 80:8501
+    container_name: Frotend-IceCreamEmpire
+    networks:
+      - postgres-network
 
   database:
     image: 'postgres:latest'
     ports:
       - 5432:5432
+    container_name: postgres-IceCreamEmpire
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=icecreamempire_s4
-      - POSTGRES_DB=postgres
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: IceCreamEmpire
     networks:
       - postgres-network
     volumes:
-      - ./db-data/:/var/lib/postgresql/data
-      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./db-data/:/var/lib/postgresql/2-data
 
-#   pgadmin:
-#     image: 'dpage/pgadmin4:latest'
-#     ports:
-#       - 15433:80
-#     env_file:
-#       - .env
-#     networks:
-#       - postgres-network
-#     depends_on:
-#       - database
-#     volumes:
-#       - ./pgadmin-data/:/var/lib/pgadmin
-
+  adminer:
+      image: adminer
+      restart: always
+      ports:
+          - 1234:8080
+      container_name: Adminer-IceCreamEmpire
+      networks:
+        - postgres-network
+      depends_on:
+          - "database"
+      
 networks: 
   postgres-network:
     driver: bridge

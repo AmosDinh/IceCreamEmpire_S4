@@ -4,3 +4,4 @@ env
 /db-data/
 /pgadmin-data/
 .vscode
+__pycache__

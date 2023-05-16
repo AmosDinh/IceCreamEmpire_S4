@@ -2,9 +2,11 @@ import plotly.express as px
 import numpy as np
 import streamlit as st
 from streamlit import session_state
+from classes.queries import Queries
 
 def main():
     st.set_page_config(page_title="Ice Cream Empire Dashboard", page_icon=":memo:", layout="wide")
+    db = Queries()
    
 
     pages = [f"Page {i+1}" for i in range(8)]
