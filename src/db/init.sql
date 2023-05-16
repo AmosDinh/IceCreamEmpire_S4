@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS OrderDetails CASCADE;
 DROP TABLE IF EXISTS Warehouses CASCADE;
 DROP TABLE IF EXISTS WarehouseStoresFlavors CASCADE;
 DROP TABLE IF EXISTS VehicleStoresFlavors CASCADE;
-
 -- Schema
 CREATE TABLE IceCreamVendors (
     vendor_id INT NOT NULL,
@@ -91,9 +90,8 @@ CREATE TABLE OrderDetails (
 CREATE TABLE Warehouses (
     warehouse_id INT PRIMARY KEY,
     address VARCHAR(30),
-     capacity DECIMAL(10, 2)
+    capacity DECIMAL(10, 2)
 );
-
 CREATE TABLE WarehouseStoresFlavors (
     warehouse_id INT,
     flavor_id INT,
@@ -106,6 +104,7 @@ CREATE TABLE VehicleStoresFlavors (
     vehicle_id INT,
     flavor_id INT,
     amount INT NOT NULL,
+    -- scoops
     FOREIGN KEY (vehicle_id) REFERENCES Vehicles (vehicle_id) ON DELETE CASCADE,
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
     PRIMARY KEY (vehicle_id, flavor_id)
@@ -168,20 +167,16 @@ INSERT INTO OrderDetails (order_id, flavor_id, amount, discount)
 VALUES (1, 1, 2, 0.00),
     (1, 2, 1, 0.00),
     (2, 3, 3, 0.00);
-
-
 INSERT INTO Warehouses (warehouse_id, address, capacity)
 VALUES (1, '123 Main St, Palo Alto', 1000),
     (2, '456 Elm St, Palo Alto', 1500),
     (3, '789 Oak St, Palo Alto', 1200);
-
 INSERT INTO WarehouseStoresFlavors (warehouse_id, flavor_id, amount)
 VALUES (1, 1, 100),
     (1, 2, 200),
     (2, 3, 300),
     (3, 1, 150),
     (3, 2, 250);
-    
 INSERT INTO VehicleStoresFlavors (vehicle_id, flavor_id, amount)
 VALUES (2, 1, 100),
     (2, 2, 200),
