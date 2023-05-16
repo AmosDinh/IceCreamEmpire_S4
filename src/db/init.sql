@@ -116,6 +116,7 @@ CREATE TABLE VehicleStoresFlavors (
 
 -- views
 -- normal view
+-- lists all flavors and their current stock (combination of stock in vehicles and in warehouses)
 CREATE VIEW Stock(id, name, amount)
 AS
 WITH warehouse_stock AS (
@@ -129,7 +130,22 @@ SELECT f.flavor_id, f.name, (w.amt+v.amt) as flavor_stock
     INNER JOIN warehouse_stock w 
         ON v.flavor_id = w.flavor_id 
     INNER JOIN flavors f 
-        on v.flavor_id = f.flavor_id
+        on v.flavor_id = f.flavor_id;
+
+-- materialized view
+-- 
+CREATE MATERIALIZED VIEW VendorPerformance
+AS
+SELECT v.vendor_id, v.forename, v.lastname, SUM(od.amount) as total_sales
+    FROM IceCreamVendors v
+    INNER JOIN Tours t ON v.vendor_id = t.vendor_id
+    INNER JOIN Orders o ON t.tours_id = o.tours_id
+    INNER JOIN OrderDetails od ON o.order_id = od.order_id
+    GROUP BY v.vendor_id, v.forename, v.lastname
+ORDER BY total_sales DESC;
+
+
+
 
 
 -- populate
@@ -161,8 +177,8 @@ INSERT INTO Tours (
     )
 VALUES 
     (1, '2023-05-11 13:00:00', '2023-05-11 17:00:00', 3, 2, 2), 
-    (4, '2023-05-13 15:00:00', '2023-05-13 19:00:00', 1, 2, 1), 
-    (2, '2023-06-11 16:00:00', '2023-06-11 20:00:00', 2, 3, 3), 
+    (4, '2023-05-13 15:00:00', '2023-05-13 21:00:00', 1, 2, 1), 
+    (2, '2023-06-11 16:00:00', '2023-06-11 23:00:00', 2, 3, 3), 
     (3, '2023-07-11 17:00:00', '2023-07-11 21:00:00', 1, 1, 2);
     
 
