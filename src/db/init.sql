@@ -9,7 +9,8 @@ DROP TABLE IF EXISTS Orders CASCADE;
 DROP TABLE IF EXISTS OrderDetails CASCADE;
 DROP TABLE IF EXISTS Warehouses CASCADE;
 DROP TABLE IF EXISTS WarehouseStoresFlavors CASCADE;
-
+DROP TABLE IF EXISTS VehicleStoresFlavors CASCADE;
+-- DROP TABLE IF EXISTS WarehousesCapacity CASCADE;
 -- Schema
 
 CREATE TABLE IceCreamVendors (
@@ -82,16 +83,22 @@ CREATE TABLE  OrderDetails (
     order_id INT,
     flavor_id INT,
     amount INT,
-    price DECIMAL(10, 2),
     discount DECIMAL(10, 2),
     FOREIGN KEY (order_id) REFERENCES Orders (order_id),
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id),
     PRIMARY KEY (order_id, flavor_id)
 );
+
 CREATE TABLE  Warehouses (
     warehouse_id INT PRIMARY KEY,
-    address VARCHAR(30),
-    capacity DECIMAL(10, 2)
+    address VARCHAR(30)
+);
+
+CREATE TABLE WarehousesCapacity(
+    warehouse_id INT,
+    capacity DECIMAL(10, 2),
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id) ON DELETE CASCADE,
+    PRIMARY KEY (warehouse_id)
 );
 
 
@@ -152,16 +159,21 @@ INSERT INTO Orders (order_id, tours_id, order_datetime, payment_type) VALUES
 (2, 1, '2023-05-10 13:00:00', 'credit'),
 (3, 2, '2023-05-11 13:30:00', 'cash');
 
-INSERT INTO OrderDetails (order_id, flavor_id, amount, price, discount) VALUES
-(1, 1, 2, 2.00, 0.00),
-(1, 2, 1, 1.50, 0.00),
-(2, 3, 3, 3.75,0.00);
+INSERT INTO OrderDetails (order_id, flavor_id, amount, discount) VALUES
+(1, 1, 2, 0.00),
+(1, 2, 1, 0.00),
+(2, 3, 3, 0.00);
 
 
-INSERT INTO Warehouses (warehouse_id, address, capacity) VALUES
-(1, '123 Main St', 1000.00),
-(2, '456 Elm St', 1500.00),
-(3, '789 Oak St', 1200.00);
+INSERT INTO WarehousesCapacity (warehouse_id, capacity) VALUES
+(1, 1000.00),
+(2, 1500.00),
+(3, 1200.00);
+
+INSERT INTO Warehouses (warehouse_id, address) VALUES
+(1, '123 Main St, Palo Alto'),
+(2, '456 Elm St, Palo Alto'),
+(3, '789 Oak St, Palo Alto');
 
 INSERT INTO WarehouseStoresFlavors (warehouse_id, flavor_id, amount) VALUES
 (1, 1, 100),
