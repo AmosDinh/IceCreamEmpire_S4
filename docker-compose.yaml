@@ -11,7 +11,7 @@ services:
       - postgres-network
 
   database:
-    image: 'postgres:latest'
+    image: postgres:15.3-alpine
     ports:
       - 5432:5432
     container_name: postgres-IceCreamEmpire
@@ -23,7 +23,7 @@ services:
       - postgres-network
     volumes:
       - ./src/db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-      - ./db-data/:/var/lib/postgresql/2-data
+    #   - ./db-data/:/var/lib/postgresql/2-data
 
   adminer:
       image: adminer

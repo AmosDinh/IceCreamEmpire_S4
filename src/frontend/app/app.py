@@ -7,14 +7,46 @@ from classes.queries import Queries
 def main():
     st.set_page_config(page_title="Ice Cream Empire Dashboard", page_icon=":memo:", layout="wide")
     db = Queries()
-   
+    df = db.sql("SELECT * FROM Flavors")
+    edited_df = st.experimental_data_editor(df,num_rows='dynamic', key="data_editor")
+
+    st.write("Here's the session state:")
+    st.write(st.session_state["data_editor"]) 
+
+    # get all edited, deleted rows or edited cells
+    st.write('edited rows, row was edited')
+    for key in st.session_state["data_editor"]['edited_cells'].keys():
+        row_index = int(key.split(":")[0])
+        st.write(edited_df.iloc[row_index,:])
+
+    st.write("added rows")
+    for row in st.session_state["data_editor"]['added_rows']:
+        values = list(row.values())
+        st.write(values)
+
+    st.write("deleted rows")
+    st.write(df.iloc[st.session_state["data_editor"]['deleted_rows'],:])
 
     pages = [f"Page {i+1}" for i in range(8)]
+    pages = [
+        'Dashboard',
+        'IceCreamVendors', 
+        'Neighborhoods', 
+        'Vehicles', 
+        'Tours', 
+        'Flavors', 
+        'Contents', 
+        'Orders', 
+        'OrderDetails', 
+        'Warehouses', 
+        ]
+
     if not "page" in session_state:
         session_state.page = pages[0]
 
     for page in pages:
         if st.sidebar.button(page):
+            print(page)
             session_state.page = page
 
     if not "data" in session_state:

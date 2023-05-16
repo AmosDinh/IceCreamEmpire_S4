@@ -48,5 +48,5 @@ pip freeze > requirements.txt
 #### Run streamlit app:
 
 ```
-streamlit run src/frontend/app.py
+streamlit run src/frontend/app/app.py
 ```

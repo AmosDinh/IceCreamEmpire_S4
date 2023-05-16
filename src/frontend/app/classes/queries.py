@@ -1,7 +1,7 @@
 import psycopg2
-from pandas import DataFrame
+import pandas as pd
 
-PGHOST = 'localhost'
+PGHOST = '172.24.189.246' #'localhost' get eth0 ip with "ip addr show" in wsl backend
 PGPORT = "5432"
 PGDATABASE = 'IceCreamEmpire'
 PGUSER = 'postgres'
@@ -22,15 +22,35 @@ class Queries:
         """
         return self.sql(sql)
     
-    
-    def sql(self, sql: str)-> DataFrame:
+    def get_dtypes(self,table_name) -> pd.DataFrame:
+        q ="""
+               SELECT column_name, data_type
+            FROM information_schema.columns
+            WHERE table_schema = 'public' AND 
+            table_name = 'Flavors';
+        """ 
+        
+        return self.sql(q)
+       
+    def convert_to_numeric(self, col):
+        # Check if column is of dtype object
+        if col.dtypes == 'object':
+            # Try to convert column to numeric
+            col = pd.to_numeric(col, errors='ignore')
+            # If column is now numeric, check if it can be converted to int
+            if pd.api.types.is_numeric_dtype(col):
+                if col.eq(col.astype(int)).all():
+                    col = col.astype(int)
+        return col
+
+    def sql(self, sql: str)-> pd.DataFrame:
         """
         Execute a query and returns a DataFrame
         """
         # Open a cursor to perform database operations
         cursor = self.conn.cursor()
         sql = sql.strip()
-
+        
         # execute the query
         try:
             cursor.execute(sql)
@@ -43,7 +63,13 @@ class Queries:
                     for i, col in enumerate(columns):
                         row_dict[col.name] = row[i]
                     results.append(row_dict)
-                return DataFrame(results)
+
+                df = pd.DataFrame(results)
+
+                # needed so streamlit dataframe editing works correctly
+                df = df.convert_dtypes() # for some reason column with 1.12 is not recognized as numeric
+                df = df.apply(self.convert_to_numeric, axis=0) # therefore use this
+                return df
             else:
                 self.conn.commit()
                 print("Successfully inserted data")
