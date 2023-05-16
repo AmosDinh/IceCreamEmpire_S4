@@ -8,13 +8,11 @@ ORDER BY total_revenue DESC;
 
 
 -- 2 Find the best-selling ice cream flavors based on the total quantity sold:
-SELECT F.name AS flavor_name,
-    SUM(OD.amount) AS total_quantity_sold
-FROM Flavors F
-    INNER JOIN OrderDetails OD ON F.flavor_id = OD.flavor_id
-GROUP BY F.name
-ORDER BY total_quantity_sold DESC
-LIMIT 5;
+SELECT o.payment_type, SUM(od.amount * f.base_price_per_scoop * (1 - od.discount)) as total_sales
+    FROM Orders o
+    INNER JOIN OrderDetails od ON o.order_id = od.order_id
+    INNER JOIN Flavors f ON od.flavor_id = f.flavor_id
+GROUP BY o.payment_type;
 
 --3 Identify the neighborhoods with the highest average order amount
 SELECT N.name AS neighborhood_name,
