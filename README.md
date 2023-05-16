@@ -15,7 +15,7 @@ On windows:
 cmd
 
 ```
-venv\bin\activate.bat
+venv\Scripts\activate.bat  
 ```
 
 powershell
@@ -48,5 +48,5 @@ pip freeze > requirements.txt
 #### Run streamlit app:
 
 ```
-streamlit run src/streamlit/app.py
+streamlit run src/frontend/app.py
 ```

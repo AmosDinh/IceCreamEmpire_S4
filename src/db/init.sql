@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS OrderDetails CASCADE;
 DROP TABLE IF EXISTS Warehouses CASCADE;
 DROP TABLE IF EXISTS WarehouseStoresFlavors CASCADE;
 
+-- Schema
 
 CREATE TABLE IceCreamVendors (
     vendor_id INT NOT NULL, 
@@ -19,43 +20,43 @@ CREATE TABLE IceCreamVendors (
     PRIMARY KEY (vendor_id)
 );
 CREATE TABLE Neighborhoods (
-    Neighborhoods_id INT NOT NULL,
+    Neighborhood_id INT NOT NULL,
     name VARCHAR(32)NOT NULL,
     distance_to_headquarter_km DECIMAL(10, 3) NOT NULL,
     area_sqkm DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (Neighborhoods_id)
+    PRIMARY KEY (Neighborhood_id)
 );
 CREATE TABLE Vehicles (
-    Vehicles_id INT NOT NULL,
+    vehicle_id INT NOT NULL,
     type VARCHAR(32)NOT NULL,
     storage_capacity INT NOT NULL, -- measured in scoops
-    PRIMARY KEY (Vehicles_id)
+    PRIMARY KEY (vehicle_id)
 );
 CREATE TABLE  Tours (
-    Tours_id INT NOT NULL,
+    tours_id INT NOT NULL,
     start_datetime TIMESTAMP NOT NULL,
     end_datetime TIMESTAMP NOT NULL,
     -- it is possible to keep a Tours even when the operating vendor, Vehicles or Neighborhoods is deleted
     vendor_id INT,
-    Vehicles_id INT,
-    Neighborhoods_id INT,
-    PRIMARY KEY (Tours_id),
+    vehicle_id INT,
+    Neighborhood_id INT,
+    PRIMARY KEY (tours_id),
     FOREIGN KEY (vendor_id) REFERENCES IceCreamVendors (vendor_id) ON DELETE
     SET NULL,
-        FOREIGN KEY (Vehicles_id) REFERENCES Vehicles (Vehicles_id) ON DELETE
+        FOREIGN KEY (vehicle_id) REFERENCES Vehicles (vehicle_id) ON DELETE
     SET NULL,
-        FOREIGN KEY (Neighborhoods_id) REFERENCES Neighborhoods (Neighborhoods_id) ON DELETE
+        FOREIGN KEY (Neighborhood_id) REFERENCES Neighborhoods (Neighborhood_id) ON DELETE
     SET NULL
 );
 -- TODO
 CREATE TABLE  Flavors (
-    flavors_id INT NOT NULL,
+    flavor_id INT NOT NULL,
     name VARCHAR(32) NOT NULL,
     base_price_per_scoop DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (flavors_id)
+    PRIMARY KEY (flavor_id)
 );
 CREATE TABLE Contents (
-    flavors_id INT,
+    flavor_id INT,
     calories INT NOT NULL,
     basis VARCHAR(32) NOT NULL,
     isvegan BOOLEAN GENERATED ALWAYS AS (
@@ -64,41 +65,53 @@ CREATE TABLE Contents (
             ELSE true
         END
     ) STORED,
-    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id) ON DELETE CASCADE,
-    PRIMARY KEY (flavors_id)
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
+    PRIMARY KEY (flavor_id)
 );
 
 CREATE TABLE  Orders (
     order_id INT NOT NULL,
-    Tours_id INT NOT NULL,
+    tours_id INT NOT NULL,
     order_datetime TIMESTAMP NOT NULL,
     payment_type VARCHAR(32) NOT NULL,
-    FOREIGN KEY (Tours_id) REFERENCES Tours (Tours_id),
+    FOREIGN KEY (tours_id) REFERENCES Tours (tours_id),
     PRIMARY KEY (order_id)
 );
 
 CREATE TABLE  OrderDetails (
     order_id INT,
-    flavors_id INT,
+    flavor_id INT,
     amount INT,
     price DECIMAL(10, 2),
     discount DECIMAL(10, 2),
     FOREIGN KEY (order_id) REFERENCES Orders (order_id),
-    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id),
-    PRIMARY KEY (order_id, flavors_id)
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id),
+    PRIMARY KEY (order_id, flavor_id)
 );
 CREATE TABLE  Warehouses (
     warehouse_id INT PRIMARY KEY,
     address VARCHAR(30),
     capacity DECIMAL(10, 2)
 );
+
+
 CREATE TABLE  WarehouseStoresFlavors (
     warehouse_id INT,
-    flavors_id INT,
+    flavor_id INT,
     amount INT NOT NULL,
-    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id),
-    FOREIGN KEY (flavors_id) REFERENCES Flavors (flavors_id),
-    PRIMARY KEY (warehouse_id, flavors_id)
+    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id) ON DELETE CASCADE,
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
+    PRIMARY KEY (warehouse_id, flavor_id)
+   
+);
+
+CREATE TABLE VehicleStoresFlavors (
+    vehicle_id INT,
+    flavor_id INT,
+    amount INT NOT NULL,
+    FOREIGN KEY (vehicle_id) REFERENCES Vehicles (vehicle_id) ON DELETE CASCADE,
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
+    PRIMARY KEY (vehicle_id, flavor_id)
    
 );
 
@@ -110,36 +123,36 @@ INSERT INTO IceCreamVendors (vendor_id, forename, lastname, salary) VALUES
 (2, 'Jane', 'Doe', 3500.00),
 (3, 'Bob', 'Smith', 3200.00);
 
-INSERT INTO Neighborhoods (Neighborhoods_id, name, distance_to_headquarter_km, area_sqkm) VALUES
+INSERT INTO Neighborhoods (Neighborhood_id, name, distance_to_headquarter_km, area_sqkm) VALUES
 (1, 'Downtown', 5.0, 10.0),
 (2, 'Uptown', 10.0, 15.0),
 (3, 'Midtown', 7.5, 12.5);
 
-INSERT INTO Vehicles (Vehicles_id, type, storage_capacity) VALUES
+INSERT INTO Vehicles (vehicle_id, type, storage_capacity) VALUES
 (1, 'Truck', 1000),
 (2, 'Van', 800),
 (3, 'Car', 600);
 
-INSERT INTO Tours (Tours_id, start_datetime, end_datetime, vendor_id, Vehicles_id, Neighborhoods_id) VALUES
+INSERT INTO Tours (tours_id, start_datetime, end_datetime, vendor_id, vehicle_id, Neighborhood_id) VALUES
 (1, '2023-05-10 12:00:00', '2023-05-10 16:00:00', 1, 1, 1),
 (2, '2023-05-11 13:00:00', '2023-05-11 17:00:00', 2, 2, 2);
 
-INSERT INTO Flavors (flavors_id, name, base_price_per_scoop) VALUES
+INSERT INTO Flavors (flavor_id, name, base_price_per_scoop) VALUES
 (1, 'Vanilla', 1.00),
 (2, 'Chocolate', 1.50),
 (3, 'Strawberry', 1.25);
 
-INSERT INTO Contents (flavors_id, calories, basis) VALUES
+INSERT INTO Contents (flavor_id, calories, basis) VALUES
 (1, 200, 'milk'),
 (2, 250, 'milk'),
 (3, 225, 'water');
 
-INSERT INTO Orders (order_id, Tours_id, order_datetime, payment_type) VALUES
+INSERT INTO Orders (order_id, tours_id, order_datetime, payment_type) VALUES
 (1, 1, '2023-05-10 12:30:00', 'cash'),
 (2, 1, '2023-05-10 13:00:00', 'credit'),
 (3, 2, '2023-05-11 13:30:00', 'cash');
 
-INSERT INTO OrderDetails (order_id, flavors_id, amount, price, discount) VALUES
+INSERT INTO OrderDetails (order_id, flavor_id, amount, price, discount) VALUES
 (1, 1, 2, 2.00, 0.00),
 (1, 2, 1, 1.50, 0.00),
 (2, 3, 3, 3.75,0.00);
@@ -150,9 +163,16 @@ INSERT INTO Warehouses (warehouse_id, address, capacity) VALUES
 (2, '456 Elm St', 1500.00),
 (3, '789 Oak St', 1200.00);
 
-INSERT INTO WarehouseStoresFlavors (warehouse_id, flavors_id, amount) VALUES
+INSERT INTO WarehouseStoresFlavors (warehouse_id, flavor_id, amount) VALUES
 (1, 1, 100),
 (1, 2, 200),
 (2, 3, 300),
 (3, 1, 150),
 (3, 2, 250);
+
+INSERT INTO VehicleStoresFlavors (vehicle_id, flavor_id, amount) VALUES
+(2, 1, 100),
+(2, 2, 200),
+(3, 3, 300),
+(1, 1, 150),
+(1, 2, 250);
