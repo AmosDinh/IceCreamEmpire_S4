@@ -12,13 +12,15 @@ FROM Flavors F
 GROUP BY F.name
 ORDER BY total_quantity_sold DESC
 LIMIT 5;
+
 --Identify the neighborhoods with the highest average order amount
 SELECT N.name AS neighborhood_name,
-    AVG(OD.amount * OD.price * (1 - OD.discount)) AS average_order_amount_discounted
+    AVG(OD.amount * FL.base_price_per_scoop * (1 - OD.discount)) AS average_order_amount_discounted
 FROM Neighborhoods N
     INNER JOIN Tours T ON N.Neighborhood_id = T.Neighborhood_id
     INNER JOIN Orders O ON T.tours_id = O.tours_id
     INNER JOIN OrderDetails OD ON O.order_id = OD.order_id
+    INNER JOIN Flavors FL ON OD.flavor_id = FL.flavor_id
 GROUP BY N.name
 ORDER BY average_order_amount_discounted DESC
 LIMIT 3;

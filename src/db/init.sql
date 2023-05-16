@@ -128,6 +128,7 @@ INSERT INTO Vehicles (vehicle_id, type, storage_capacity)
 VALUES (1, 'Truck', 1000),
     (2, 'Van', 800),
     (3, 'Car', 600);
+
 INSERT INTO Tours (
         tours_id,
         start_datetime,
@@ -136,22 +137,13 @@ INSERT INTO Tours (
         vehicle_id,
         Neighborhood_id
     )
-VALUES (
-        1,
-        '2023-05-10 12:00:00',
-        '2023-05-10 16:00:00',
-        1,
-        1,
-        1
-    ),
-    (
-        2,
-        '2023-05-11 13:00:00',
-        '2023-05-11 17:00:00',
-        2,
-        2,
-        2
-    );
+VALUES 
+    (1, '2023-05-11 13:00:00', '2023-05-11 17:00:00', 3, 2, 2), 
+    (4, '2023-05-13 15:00:00', '2023-05-13 19:00:00', 1, 2, 1), 
+    (2, '2023-06-11 16:00:00', '2023-06-11 20:00:00', 2, 3, 3), 
+    (3, '2023-07-11 17:00:00', '2023-07-11 21:00:00', 1, 1, 2);
+    
+
 INSERT INTO Flavors (flavor_id, name, base_price_per_scoop)
 VALUES (1, 'Vanilla', 1.00),
     (2, 'Chocolate', 1.50),
@@ -162,12 +154,22 @@ VALUES (1, 200, 'milk'),
     (3, 225, 'water');
 INSERT INTO Orders (order_id, tours_id, order_datetime, payment_type)
 VALUES (1, 1, '2023-05-10 12:30:00', 'cash'),
-    (2, 1, '2023-05-10 13:00:00', 'credit'),
-    (3, 2, '2023-05-11 13:30:00', 'cash');
+    (2, 2, '2023-05-10 13:00:00', 'credit'),
+    (3, 3, '2023-05-11 13:30:00', 'cash'),
+    (4, 4, '2023-05-11 13:30:00', 'cash');
+   
+
 INSERT INTO OrderDetails (order_id, flavor_id, amount, discount)
 VALUES (1, 1, 2, 0.00),
-    (1, 2, 1, 0.00),
-    (2, 3, 3, 0.00);
+    (1, 2, 1, 0.30),
+    (2, 3, 3, 0.00),
+     (2, 1, 4, 0.00),
+    (2, 2, 3, 0.15),
+     (3, 2, 1, 0.00),
+    (3, 3, 3, 0.00),
+     (1, 3, 1, 0.1),
+    (3, 1, 3, 0.00),
+    (4, 1, 3, 0.00);
 
 
 INSERT INTO Warehouses (warehouse_id, address, capacity)
