@@ -1,9 +1,11 @@
 -- Retrieve the total sales revenue for each ice cream flavor:
 SELECT F.name AS flavor_name,
-    SUM(OD.amount * OD.price * (1 - OD.discount)) AS total_revenue
+    SUM(OD.amount * F.base_price_per_scoop * (1 - OD.discount)) AS total_revenue
 FROM Flavors F
     INNER JOIN OrderDetails OD ON F.flavor_id = OD.flavor_id
-GROUP BY F.name;
+GROUP BY F.name
+ORDER BY total_revenue DESC;
+
 --Find the best-selling ice cream flavors based on the total quantity sold:
 SELECT F.name AS flavor_name,
     SUM(OD.amount) AS total_quantity_sold
@@ -24,3 +26,6 @@ FROM Neighborhoods N
 GROUP BY N.name
 ORDER BY average_order_amount_discounted DESC
 LIMIT 3;
+
+-- Get current stored inventory per vehicle as a percentage of its capacity:
+-- see if current warehouse inventory is sufficient to fill all vehicles

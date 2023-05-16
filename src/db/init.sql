@@ -10,6 +10,10 @@ DROP TABLE IF EXISTS OrderDetails CASCADE;
 DROP TABLE IF EXISTS Warehouses CASCADE;
 DROP TABLE IF EXISTS WarehouseStoresFlavors CASCADE;
 DROP TABLE IF EXISTS VehicleStoresFlavors CASCADE;
+
+
+
+
 -- Schema
 CREATE TABLE IceCreamVendors (
     vendor_id INT NOT NULL,
@@ -109,6 +113,25 @@ CREATE TABLE VehicleStoresFlavors (
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
     PRIMARY KEY (vehicle_id, flavor_id)
 );
+
+-- views
+-- normal view
+CREATE VIEW Stock(id, name, amount)
+AS
+WITH warehouse_stock AS (
+	SELECT SUM(amount) as amt, flavor_id FROM WarehouseStoresFlavors GROUP BY flavor_id
+),
+vehicle_stock AS (
+	SELECT SUM(amount) as amt, flavor_id FROM VehicleStoresFlavors GROUP BY flavor_id
+)
+SELECT f.flavor_id, f.name, (w.amt+v.amt) as flavor_stock  
+    FROM vehicle_stock v 
+    INNER JOIN warehouse_stock w 
+        ON v.flavor_id = w.flavor_id 
+    INNER JOIN flavors f 
+        on v.flavor_id = f.flavor_id
+
+
 -- populate
 INSERT INTO IceCreamVendors (vendor_id, forename, lastname, salary)
 VALUES (1, 'John', 'Doe', 3000.00),
