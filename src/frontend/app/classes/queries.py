@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 
-PGHOST = '172.24.189.246' #'localhost' get eth0 ip with "ip addr show" in wsl backend
+PGHOST = "postgres-IceCreamEmpire"
 PGPORT = "5432"
 PGDATABASE = 'IceCreamEmpire'
 PGUSER = 'postgres'
@@ -11,7 +11,6 @@ PGPASSWORD = '1234'
 class Queries:
     def __init__(self)-> None:
         self.conn = psycopg2.connect(host=PGHOST, port=PGPORT, dbname=PGDATABASE, user=PGUSER, password=PGPASSWORD)
-        
 
     def get_vehicles(self):
         """
