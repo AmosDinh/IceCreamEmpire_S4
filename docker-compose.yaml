@@ -6,9 +6,12 @@ services:
     build: ./src/frontend
     ports:
       - 80:8501
+      - 5678:5678 # Debug port
     container_name: Frotend-IceCreamEmpire
     networks:
       - postgres-network
+    volumes:
+      - ./src/frontend/:/frontend/
 
   database:
     image: postgres:15.3-alpine
@@ -23,7 +26,7 @@ services:
       - postgres-network
     volumes:
       - ./src/db/init.sql:/docker-entrypoint-initdb.d/1-init.sql
-    #   - ./db-data/:/var/lib/postgresql/2-data
+      - pgdata:/var/lib/postgresql/data
 
   adminer:
       image: adminer
