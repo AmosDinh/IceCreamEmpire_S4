@@ -6,3 +6,4 @@ env
 .vscode
 __pycache__
 /pgdata/
+amoshost.json

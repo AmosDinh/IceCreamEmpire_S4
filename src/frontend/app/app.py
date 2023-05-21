@@ -5,32 +5,19 @@ from streamlit import session_state
 from classes.queries import Queries
 import debugpy
 
+from classes.streamlit_helpers import get_write_relation_to_screen
 
 # debugpy.listen(("0.0.0.0", 5678))
 
 
 def main():
+  
     st.set_page_config(page_title="Ice Cream Empire Dashboard", page_icon=":memo:", layout="wide")
+    
+    # if "data_editor" not in st.session_state:
     db = Queries()
-    df = db.sql("SELECT * FROM Flavors")
-    edited_df = st.experimental_data_editor(df,num_rows='dynamic', key="data_editor")
-
-    st.write("Here's the session state:")
-    st.write(st.session_state["data_editor"]) 
-
-    # get all edited, deleted rows or edited cells
-    st.write('edited rows, row was edited')
-    for key in st.session_state["data_editor"]['edited_cells'].keys():
-        row_index = int(key.split(":")[0])
-        st.write(edited_df.iloc[row_index,:])
-
-    st.write("added rows")
-    for row in st.session_state["data_editor"]['added_rows']:
-        values = list(row.values())
-        st.write(values)
-
-    st.write("deleted rows")
-    st.write(df.iloc[st.session_state["data_editor"]['deleted_rows'],:])
+    
+    get_write_relation_to_screen(db, "Flavors")
 
     pages = [f"Page {i+1}" for i in range(8)]
     pages = [
