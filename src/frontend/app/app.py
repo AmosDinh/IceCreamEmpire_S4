@@ -3,11 +3,7 @@ import numpy as np
 import streamlit as st
 from streamlit import session_state
 from classes.queries import Queries
-import debugpy
-
 from classes.streamlit_helpers import get_write_relation_to_screen
-
-# debugpy.listen(("0.0.0.0", 5678))
 
 
 def main():
