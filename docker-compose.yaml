@@ -6,7 +6,6 @@ services:
     build: ./src/frontend
     ports:
       - 80:8501
-      - 5678:5678 # Debug port
     container_name: Frotend-IceCreamEmpire
     networks:
       - postgres-network
