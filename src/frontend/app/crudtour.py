@@ -4,6 +4,7 @@ import streamlit as st
 # from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 # from sqlalchemy.sql import select
 # import os
 # from sqlalchemy import text
@@ -39,8 +40,13 @@ def crudtour(db):
     selected_vehicle = st.selectbox("Select Vehicle", options=list(vehicle_options.keys()))
     selected_neighborhood = st.selectbox("Select Neighborhood", options=list(neighborhood_options.keys()))
 
-    start_datetime = st.date_input("Select Start Date and Time")
-    end_datetime = st.date_input("Select End Date and Time")
+    start_datetime = st.date_input("Select Start Date")
+    start_datetime_hours = st.time_input("Select a Start time")
+    start_datetime = datetime.combine(start_datetime, start_datetime_hours)
+
+    end_datetime = st.date_input("Select End Date")
+    end_datetime_hours = st.time_input("Select a End time")
+    end_datetime = datetime.combine(end_datetime, end_datetime_hours)
 
 
     if st.button("Create Tour"):
@@ -79,8 +85,13 @@ def crudtour(db):
             options=list(neighborhood_options.keys()),
             index=list(neighborhood_options.values()).index(tour.neighborhood_id),
         )
-        new_start_datetime = st.date_input("Select New Start Date and Time", value=tour.start_datetime)
-        new_end_datetime = st.date_input("Select New End Date and Time", value=tour.end_datetime)
+        new_start_datetime = st.date_input("Select New Start Date", value=tour.start_datetime)
+        new_start_selected_time = st.time_input("Select a Start time", value=tour.start_datetime)
+        new_start_datetime = datetime.combine(new_start_datetime, new_start_selected_time)
+        
+        new_end_datetime = st.date_input("Select New End Date", value=tour.end_datetime)
+        new_end_selected_time = st.time_input("Select a End time", value=tour.start_datetime)
+        new_end_datetime = datetime.combine(new_end_datetime, new_end_selected_time)
 
         if st.button("Update Tour"):
             tour.vendor_id = vendor_options[new_vendor]
