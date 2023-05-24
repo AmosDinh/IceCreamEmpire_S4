@@ -86,11 +86,11 @@ def crudtour(db):
             index=list(neighborhood_options.values()).index(tour.neighborhood_id),
         )
         new_start_datetime = st.date_input("Select New Start Date", value=tour.start_datetime)
-        new_start_selected_time = st.time_input("Select a Start time", value=tour.start_datetime)
+        new_start_selected_time = st.time_input("Select a new Start time", value=tour.start_datetime)
         new_start_datetime = datetime.combine(new_start_datetime, new_start_selected_time)
         
         new_end_datetime = st.date_input("Select New End Date", value=tour.end_datetime)
-        new_end_selected_time = st.time_input("Select a End time", value=tour.start_datetime)
+        new_end_selected_time = st.time_input("Select a new End time", value=tour.start_datetime)
         new_end_datetime = datetime.combine(new_end_datetime, new_end_selected_time)
 
         if st.button("Update Tour"):
