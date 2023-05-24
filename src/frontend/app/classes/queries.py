@@ -70,7 +70,7 @@ class Queries:
     def get_relation(self, relation_name):
         primary_keys = {
             'IceCreamVendors': ['vendor_id'],
-            'Neighborhoods': ['Neighborhood_id'],
+            'Neighborhoods': ['neighborhood_id'],
             'Vehicles': ['vehicle_id'],
             'Tours': ['tours_id'],
             'Flavors': ['flavor_id'],

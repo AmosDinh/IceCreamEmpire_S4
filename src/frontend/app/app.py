@@ -1,72 +1,61 @@
 import plotly.express as px 
-import numpy as np
 import streamlit as st
 from streamlit import session_state
 from classes.queries import Queries
-from classes.streamlit_helpers import get_write_relation_to_screen
 
 
 def main():
-  
     st.set_page_config(page_title="Ice Cream Empire Dashboard", page_icon=":memo:", layout="wide")
-    
-    # if "data_editor" not in st.session_state:
     db = Queries()
-    
-    get_write_relation_to_screen(db, "Flavors")
 
-    pages = [f"Page {i+1}" for i in range(8)]
     pages = [
         'Dashboard',
         'IceCreamVendors', 
-        'Neighborhoods', 
+        'Neighborhoods',
         'Vehicles', 
         'Tours', 
         'Flavors', 
         'Contents', 
         'Orders', 
         'OrderDetails', 
-        'Warehouses', 
+        'Warehouses',
         ]
+    
 
+    # Startpage
     if not "page" in session_state:
         session_state.page = pages[0]
 
+    # Create sidebar with tabs
     for page in pages:
         if st.sidebar.button(page):
             print(page)
             session_state.page = page
 
-    if not "data" in session_state:
-        session_state.data = {page: [] for page in pages}
-
+    # Set title
     st.title(session_state.page)
 
-    with st.form(key="input_form"):
-        input1 = st.text_input("Input 1")
-        input2 = st.text_input("Input 2")
-        input3 = st.text_input("Input 3")
-        submit_button = st.form_submit_button(label="Submit")
 
-    x = np.linspace(0, 10, 100)
-    y = np.sin(x)
+    # Side content
+    # Create tabs with table views
+    for page in pages[1:]:
+        if session_state.page == page:
+            query = f"SELECT * FROM {page}"
+            df = db.sql(query)
+            st.write(df)
 
-    fig = px.scatter(x=x, y=y)
-    st.plotly_chart(fig)
+    # Dashboard tab
+    if session_state.page == "Dashboard":
+        query = f"SELECT * FROM VendorPerformance"
+        vendor_performance_data = db.sql(query)
+        query = f"SELECT * FROM Stock"
+        stock_data = db.sql(query)
+        # Create bar charts using Plotly Express
+        vendor_performance_chart = px.bar(vendor_performance_data, x='forename', y='total_sales', title='Vendor Performance')
+        stock_chart = px.bar(stock_data, x='name', y='amount', title='Current Stock')
+        st.plotly_chart(vendor_performance_chart)
+        st.plotly_chart(stock_chart)
 
-    fig = px.scatter(x=x, y=y)
-    st.plotly_chart(fig)
-    
-    if submit_button:
-        session_state.data[session_state.page].append([input1, input2, input3])
-
-    for i, row in enumerate(session_state.data[session_state.page]):
-        cols = st.columns(4)
-        cols[0].write(row[0])
-        cols[1].write(row[1])
-        cols[2].write(row[2])
-        if cols[3].button("Delete", key=f"delete_{i}"):
-            del session_state.data[session_state.page][i]
 
 if __name__ == "__main__":
     main()
