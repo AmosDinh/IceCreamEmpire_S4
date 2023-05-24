@@ -5,6 +5,7 @@ import streamlit as st
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+import time
 # from sqlalchemy.sql import select
 # import os
 # from sqlalchemy import text
@@ -24,7 +25,7 @@ def crudtour(db):
     session = sessionmaker(bind=engine)()
 
     # Streamlit app
-    st.title("Ice Cream Tour Management")
+    # st.title("Ice Cream Tour Management")
 
     # Create a new tour
     st.header("Create a New Tour")
@@ -60,6 +61,7 @@ def crudtour(db):
         session.add(new_tour)
         session.commit()
         st.success("Tour created successfully!")
+        time.sleep(1)
         st.experimental_rerun()
 
     # Update or delete a tour
@@ -101,10 +103,12 @@ def crudtour(db):
             tour.end_datetime = new_end_datetime
             session.commit()
             st.success("Tour updated successfully!")
+            time.sleep(1)
             st.experimental_rerun()
 
         if st.button("Delete Tour"):
             session.delete(tour)
             session.commit()
             st.success("Tour deleted successfully!")
+            time.sleep(1)
             st.experimental_rerun()
