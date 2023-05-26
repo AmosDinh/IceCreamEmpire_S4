@@ -43,7 +43,7 @@ def main():
 
     # Side content
     # Create tabs with table views
-    for page in pages[2:]:
+    for page in pages[3:]:
         if session_state.page == page:
             query = f"SELECT * FROM {page}"
             df = db.sql(query)
