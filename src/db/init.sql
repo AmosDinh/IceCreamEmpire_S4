@@ -78,11 +78,11 @@ CREATE TABLE Orders (
     PRIMARY KEY (order_id)
 );
 CREATE TABLE OrderDetails (
-    order_id SERIAL,
-    flavor_id SERIAL,
-    amount SERIAL,
+    order_id INT,
+    flavor_id INT,
+    amount INT,
     --scoops
-    discount SERIAL,
+    discount INT,
     -- in %
     FOREIGN KEY (order_id) REFERENCES Orders (order_id),
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id),

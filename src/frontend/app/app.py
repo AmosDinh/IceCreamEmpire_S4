@@ -3,7 +3,7 @@ import streamlit as st
 from streamlit import session_state
 from classes.queries import Queries
 from crudtour import crudtour
-
+from crudorder import crudorder
 
 def main():
     st.set_page_config(
@@ -14,6 +14,7 @@ def main():
     pages = [
         "Dashboard",
         "Tour CRUD",
+        "Orders CRUD",
         "IceCreamVendors",
         "Neighborhoods",
         "Vehicles",
@@ -35,7 +36,6 @@ def main():
             print(page)
             session_state.page = page
 
-    # Set title
     st.title(session_state.page)
 
     # Side content
@@ -68,10 +68,17 @@ def main():
             labels={"name": "Name", "amount": "Amount"},
         )
         st.plotly_chart(vendor_performance_chart)
+        if st.button("Refresh Vendor Performance (Materialized View)"):
+            db.sql("REFRESH MATERIALIZED VIEW VendorPerformance;")
+            st.experimental_rerun()
+
         st.plotly_chart(stock_chart)
+        
 
     if session_state.page == "Tour CRUD":
         crudtour(db)
+    if  session_state.page == "Orders CRUD":
+        crudorder(db)
 
 
 
