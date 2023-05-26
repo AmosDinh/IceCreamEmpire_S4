@@ -18,12 +18,15 @@ def main():
         "IceCreamVendors",
         "Neighborhoods",
         "Vehicles",
+        "VehicleStoresFlavors",
         "Tours",
         "Flavors",
         "Contents",
         "Orders",
         "OrderDetails",
         "Warehouses",
+        "WarehouseStoresFlavors"
+        
     ]
 
     # Startpage

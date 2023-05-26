@@ -37,7 +37,7 @@ def crudorder(db):
     session = Session(engine)
 
     # Streamlit frontend
-    st.title("Ice Cream orders")
+    # st.title("Ice Cream orders")
 
     # get flavors in truck
     
