@@ -95,16 +95,16 @@ CREATE TABLE Warehouses (
    PRIMARY KEY (warehouse_id)
 );
 CREATE TABLE WarehouseStoresFlavors (
-   warehouse_id SERIAL ,
-   flavor_id SERIAL ,
+   warehouse_id INT,
+   flavor_id INT,
    amount INT NOT NULL ,
    FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id) ON DELETE CASCADE ,
    FOREIGN KEY (flavor_id) REFERENCES Flavors(flavor_id) ON DELETE CASCADE ,
    PRIMARY KEY (warehouse_id, flavor_id)
 );
 CREATE TABLE VehicleStoresFlavors (
-   vehicle_id SERIAL ,
-   flavor_id SERIAL ,
+   vehicle_id INT,
+   flavor_id INT,
    amount INT NOT NULL ,
    -- scoops
    FOREIGN KEY(vehicle_id) REFERENCES Vehicles(vehicle_id) ON DELETE CASCADE ,
