@@ -1,2 +1,0 @@
-get total revenue and ice measured in scoops from a tour
-predict if there is enough flavor left in vehicle for next tour
