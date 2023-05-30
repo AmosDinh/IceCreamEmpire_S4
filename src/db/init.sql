@@ -162,6 +162,8 @@ BEFORE INSERT OR UPDATE ON OrderDetails
 FOR EACH ROW
 EXECUTE FUNCTION check_discount_in_range();
 
+-- secondary index 
+CREATE UNIQUE INDEX flavor_index ON flavors (name);
 
 
 -- populate with data
