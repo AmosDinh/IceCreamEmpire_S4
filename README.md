@@ -1,11 +1,7 @@
 # IceCreamEmpire 
 
 ## Run the application
-<<<<<<< HEAD
-- Open a cmd in the IceCreamEmpire folder
-=======
 - Open a cmd in the IceCreamEmpire folder.
->>>>>>> 530847dbebaa5943c4398e1f8168fd1df6291cfb
 
 - Start the application with the command:
     ```
