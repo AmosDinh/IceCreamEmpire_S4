@@ -1,52 +1,31 @@
-# IceCreamEmpire_S4
+# IceCreamEmpire 
 
-## Development
+## Run the application
+- Open a cmd in the IceCreamEmpire folder
 
-### Setup (Python 3.10.9)
+- Start the application with the command:
+    ```
+    docker-compose up
+    ```
 
-```
-python -m venv venv
-```
+The application is now available via [http://localhost](http://localhost) on HTTP port 80.
 
-Activate environment
+- Stop the application with the command:
+    ```
+    doocker-compose down
+    ```
 
-On windows:
+## Navigation
+### Backend
+- The <strong>Queries</strong> can be found in [queries.sql](src/db/queries.sql)
+- To perform <strong>SQL-Statements</strong> the Queries class is used. The source-code can be found in [queries.py](src/frontend/app/classes/queries.py)
 
-cmd
-
-```
-venv\Scripts\activate.bat  
-```
-
-powershell
-
-```
-.\.venv\Scripts\Activate.ps1
-```
-
-On Linux:
-
-```
-source venv/bin/activate
-```
-
-After activation
-
-```
-pip install -r requirements.txt
-
-```
-
-Add new package to requirements.txt
-
-```
-pip freeze > requirements.txt
-```
 
 ### Frontend
+The Frontend is implemented using the streamlit framework in Python
+- The source-code of the main page can be found in [app.py](/src/frontend/app/app.py)
+- The implementation for the CRUD sites can be found in 
+[crudorder.py](src/frontend/app/crudorder.py) and [crudtour.py](src/frontend/app/crudtour.py)
 
-#### Run streamlit app:
-
-```
-streamlit run src/frontend/app/app.py
-```
+### Documentation
+- The documentation can be found in [/doc/](/doc/.) folder
