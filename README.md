@@ -1,7 +1,11 @@
 # IceCreamEmpire 
 
 ## Run the application
+<<<<<<< HEAD
 - Open a cmd in the IceCreamEmpire folder
+=======
+- Open a cmd in the IceCreamEmpire folder.
+>>>>>>> 530847dbebaa5943c4398e1f8168fd1df6291cfb
 
 - Start the application with the command:
     ```
@@ -28,4 +32,4 @@ The Frontend is implemented using the streamlit framework in Python
 [crudorder.py](src/frontend/app/crudorder.py) and [crudtour.py](src/frontend/app/crudtour.py)
 
 ### Documentation
-- The documentation can be found in [/doc/](/doc/.) folder
+- The documentation can be be found in [/doc/](/doc/) Folder
