@@ -142,7 +142,29 @@ SELECT v.vendor_id, v.forename, v.lastname, SUM(od.amount) as total_sales
     GROUP BY v.vendor_id, v.forename, v.lastname
 ORDER BY total_sales DESC;
 
--- populate
+
+-- procedure
+-- check if discount is in valid range
+-- when order detail is added or updated
+CREATE OR REPLACE FUNCTION check_discount_in_range()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.discount < 0 OR NEW.discount > 100 THEN
+    RAISE EXCEPTION 'Discount must be between 0 and 100';
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER order_details_discount_check
+BEFORE INSERT OR UPDATE ON OrderDetails
+FOR EACH ROW
+EXECUTE FUNCTION check_discount_in_range();
+
+
+
+-- populate with data
 INSERT INTO IceCreamVendors (forename, lastname, salary)
 VALUES ('John', 'Doe', 3000.00),
     ('Jane', 'Doe', 3500.00),
@@ -190,16 +212,16 @@ VALUES (1, '2023-05-10 12:30:00', 'cash'),
    
 
 INSERT INTO OrderDetails (order_id, flavor_id, amount, discount)
-VALUES (1, 1, 2, 0.00),
-    (1, 2, 1, 0.30),
-    (2, 3, 3, 0.00),
-     (2, 1, 4, 0.00),
-    (2, 2, 3, 0.15),
-     (3, 2, 1, 0.00),
-    (3, 3, 3, 0.00),
-     (1, 3, 1, 0.1),
-    (3, 1, 3, 0.00),
-    (4, 1, 3, 0.00);
+VALUES (1, 1, 2, 0),
+    (1, 2, 1, 30),
+    (2, 3, 3, 0),
+     (2, 1, 4, 0),
+    (2, 2, 3, 15),
+     (3, 2, 1, 0),
+    (3, 3, 3, 0),
+     (1, 3, 1, 10),
+    (3, 1, 3, 0),
+    (4, 1, 3, 0);
 
 
 INSERT INTO Warehouses (warehouse_id, address,capacity)

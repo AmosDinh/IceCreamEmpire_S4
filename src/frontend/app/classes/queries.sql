@@ -7,7 +7,7 @@ GROUP BY F.name
 ORDER BY total_revenue DESC;
 
 
--- 2 Find the best-selling ice cream flavors based on the total quantity sold:
+-- 2 Compare total revenue for each payment type:
 SELECT o.payment_type, SUM(od.amount * f.base_price_per_scoop * (1 - od.discount)) as total_sales
     FROM Orders o
     INNER JOIN OrderDetails od ON o.order_id = od.order_id
