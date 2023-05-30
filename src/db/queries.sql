@@ -1,22 +1,16 @@
 -- 1 Retrieve the total sales revenue for each ice cream flavor:
 SELECT F.name AS flavor_name,
-    SUM(OD.amount * F.base_price_per_scoop * (1 - OD.discount)) AS total_revenue
+    ROUND(SUM(OD.amount * F.base_price_per_scoop * (100 - OD.discount)/100),2) AS total_revenue
 FROM Flavors F
     INNER JOIN OrderDetails OD ON F.flavor_id = OD.flavor_id
 GROUP BY F.name
 ORDER BY total_revenue DESC;
 
 
--- 2 Compare total revenue for each payment type:
-SELECT o.payment_type, SUM(od.amount * f.base_price_per_scoop * (1 - od.discount)) as total_sales
-    FROM Orders o
-    INNER JOIN OrderDetails od ON o.order_id = od.order_id
-    INNER JOIN Flavors f ON od.flavor_id = f.flavor_id
-GROUP BY o.payment_type;
 
---3 Identify the neighborhoods with the highest average order amount
+--2 Identify the neighborhoods with the highest average order amount
 SELECT N.name AS neighborhood_name,
-    AVG(OD.amount * FL.base_price_per_scoop * (1 - OD.discount)) AS average_order_amount_discounted
+    ROUND(AVG(OD.amount * FL.base_price_per_scoop * (100 - OD.discount)),2) AS average_order_amount_discounted
 FROM Neighborhoods N
     INNER JOIN Tours T ON N.Neighborhood_id = T.Neighborhood_id
     INNER JOIN Orders O ON T.tours_id = O.tours_id
@@ -26,7 +20,8 @@ GROUP BY N.name
 ORDER BY average_order_amount_discounted DESC
 LIMIT 3;
 
--- 4 total sales per neighborhood and flavor
+
+-- 3 total sales per neighborhood and flavor
 SELECT f.name as flavor_name, n.name as neighborhood_name, SUM(od.amount) as total_sales
     FROM Flavors f
         INNER JOIN OrderDetails od ON f.flavor_id = od.flavor_id
@@ -36,8 +31,16 @@ SELECT f.name as flavor_name, n.name as neighborhood_name, SUM(od.amount) as tot
 GROUP BY flavor_name, neighborhood_name
 ORDER BY flavor_name ASC, neighborhood_name ASC
 
+
+-- 4 Compare total revenue for each payment type:
+SELECT o.payment_type, ROUND(SUM(OD.amount * F.base_price_per_scoop * (100 - OD.discount)/100),2) as total_revenue
+    FROM Orders o
+    INNER JOIN OrderDetails od ON o.order_id = od.order_id
+    INNER JOIN Flavors f ON od.flavor_id = f.flavor_id
+GROUP BY o.payment_type;
+
 -- 5 Average sales per tour duration
-SELECT DATE_PART('hour', t.end_datetime - t.start_datetime) as tour_duration_hours, AVG(od.amount) as average_sales
+SELECT DATE_PART('hour', t.end_datetime - t.start_datetime) as tour_duration_hours, ROUND(AVG(od.amount),2) as average_sales
 FROM IceCreamVendors v
 INNER JOIN Tours t ON v.vendor_id = t.vendor_id
 INNER JOIN Orders o ON t.tours_id = o.tours_id
@@ -68,4 +71,6 @@ FROM
 	INNER JOIN Flavors fs ON wsf.flavor_id = fs.flavor_id
 ORDER BY amount DESC;
  
+
+
 
