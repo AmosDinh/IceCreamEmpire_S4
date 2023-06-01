@@ -42,11 +42,11 @@ CREATE TABLE Tours (
     vehicle_id INT,
     Neighborhood_id INT,
     PRIMARY KEY (tours_id),
-    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendors (vendor_id) ON DELETE
+    FOREIGN KEY (vendor_id) REFERENCES IceCreamVendors (vendor_id) ON UPDATE CASCADE ON DELETE
     SET NULL,
-        FOREIGN KEY (vehicle_id) REFERENCES Vehicles (vehicle_id) ON DELETE
+        FOREIGN KEY (vehicle_id) REFERENCES Vehicles (vehicle_id) ON UPDATE CASCADE ON DELETE
     SET NULL,
-        FOREIGN KEY (Neighborhood_id) REFERENCES Neighborhoods (Neighborhood_id) ON DELETE
+        FOREIGN KEY (Neighborhood_id) REFERENCES Neighborhoods (Neighborhood_id) ON UPDATE CASCADE ON DELETE
     SET NULL
 );
 -- TODO
