@@ -66,7 +66,7 @@ CREATE TABLE Contents (
             ELSE true
         END
     ) STORED,
-    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON DELETE CASCADE,
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE ,
     PRIMARY KEY (flavor_id)
 );
 CREATE TABLE Orders (
@@ -74,7 +74,7 @@ CREATE TABLE Orders (
     tours_id INT NOT NULL,
     order_datetime TIMESTAMP NOT NULL,
     payment_type VARCHAR(32) NOT NULL,
-    FOREIGN KEY (tours_id) REFERENCES Tours (tours_id),
+    FOREIGN KEY (tours_id) REFERENCES Tours (tours_id)  ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (order_id)
 );
 CREATE TABLE OrderDetails (
@@ -84,8 +84,8 @@ CREATE TABLE OrderDetails (
     --scoops
     discount INT,
     -- in %
-    FOREIGN KEY (order_id) REFERENCES Orders (order_id),
-    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id),
+    FOREIGN KEY (order_id) REFERENCES Orders (order_id) ON UPDATE CASCADE ON DELETE CASCADE ,
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE ,
      PRIMARY KEY (order_id, flavor_id)
 );
 CREATE TABLE Warehouses (
@@ -98,8 +98,8 @@ CREATE TABLE WarehouseStoresFlavors (
    warehouse_id INT,
    flavor_id INT,
    amount INT NOT NULL ,
-   FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id) ON DELETE CASCADE ,
-   FOREIGN KEY (flavor_id) REFERENCES Flavors(flavor_id) ON DELETE CASCADE ,
+   FOREIGN KEY (warehouse_id) REFERENCES Warehouses (warehouse_id) ON UPDATE CASCADE ON DELETE CASCADE  ,
+   FOREIGN KEY (flavor_id) REFERENCES Flavors(flavor_id) ON UPDATE CASCADE ON DELETE CASCADE  ,
    PRIMARY KEY (warehouse_id, flavor_id)
 );
 CREATE TABLE VehicleStoresFlavors (
@@ -107,8 +107,8 @@ CREATE TABLE VehicleStoresFlavors (
    flavor_id INT,
    amount INT NOT NULL ,
    -- scoops
-   FOREIGN KEY(vehicle_id) REFERENCES Vehicles(vehicle_id) ON DELETE CASCADE ,
-   FOREIGN KEY(flavor_id) REFERENCES Flavors(flavor_id) ON DELETE CASCADE ,
+   FOREIGN KEY(vehicle_id) REFERENCES Vehicles(vehicle_id) ON UPDATE CASCADE ON DELETE CASCADE  ,
+   FOREIGN KEY(flavor_id) REFERENCES Flavors(flavor_id) ON UPDATE CASCADE ON DELETE CASCADE  ,
    PRIMARY KEY(vehicle_id, flavor_id)
 );
 
