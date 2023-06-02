@@ -80,9 +80,9 @@ CREATE TABLE Orders (
 CREATE TABLE OrderDetails (
     order_id INT,
     flavor_id INT,
-    amount INT,
+    amount INT NOT NULL,
     --scoops
-    discount INT,
+    discount INT NOT NULL,
     -- in %
     FOREIGN KEY (order_id) REFERENCES Orders (order_id) ON UPDATE CASCADE ON DELETE CASCADE ,
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE ,
@@ -90,8 +90,11 @@ CREATE TABLE OrderDetails (
 );
 CREATE TABLE Warehouses (
    warehouse_id SERIAL,
-   address VARCHAR(30),
-   capacity DECIMAL(10, 2),
+   streetnumber VARCHAR(30) NOT NULL,
+   street VARCHAR(30) NOT NULL,
+   zipcode VARCHAR(30) NOT NULL,
+   city VARCHAR(30) NOT NULL,
+   capacity DECIMAL(10, 2) NOT NULL,
    PRIMARY KEY (warehouse_id)
 );
 CREATE TABLE WarehouseStoresFlavors (
@@ -226,10 +229,10 @@ VALUES (1, 1, 2, 0),
     (4, 1, 3, 0);
 
 
-INSERT INTO Warehouses (warehouse_id, address,capacity)
-VALUES (1, '123 Main St,Palo Alto',1000),
-       (2, '456 Elm St,Palo Alto',1500),
-       (3, '789 Oak St,Palo Alto',1200);
+INSERT INTO Warehouses (warehouse_id, streetnumber, street, zipcode, city,capacity)
+VALUES (1, '123','Main Street','Palo Alto','14362',1000),
+       (2, '456','Elm Street','Palo Alto','14362',1500),
+       (3, '789','Oak Street','Palo Alto','14362',1200);
        
 INSERT INTO WarehouseStoresFlavors(warehouse_id ,flavor_id ,amount)
 VALUES(1 ,1 ,100),
