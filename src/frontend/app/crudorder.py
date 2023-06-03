@@ -24,20 +24,16 @@ def crudorder(db):
     Base.prepare(engine, reflect=True)
 
 
-    # icecreamvendors = Base.classes.icecreamvendors
-    # neighborhoods = Base.classes.neighborhoods
-    # vehicles = Base.classes.vehicles
+    
     tours = Base.classes.tours
     flavors = Base.classes.flavors
-    # contents = Base.classes.contents
     orders = Base.classes.orders
     orderdetails = Base.classes.orderdetails
     vehiclestoresflavors = Base.classes.vehiclestoresflavors
 
     session = Session(engine)
 
-    # Streamlit frontend
-    # st.title("Ice Cream orders")
+ 
 
     # get flavors in truck
     
@@ -95,7 +91,6 @@ def crudorder(db):
         session.commit()
         st.success(f"Order created with ID: {new_order.order_id}")
         time.sleep(1)
-        #st.experimental_rerun()
 
     # Create new order detail
     

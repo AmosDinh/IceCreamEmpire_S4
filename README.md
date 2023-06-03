@@ -12,7 +12,7 @@ The application is now available via [http://localhost](http://localhost) on HTT
 
 - Stop the application with the command:
     ```
-    doocker-compose down
+    docker-compose down
     ```
 
 ## Navigation

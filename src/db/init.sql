@@ -52,7 +52,7 @@ CREATE TABLE Tours (
 -- TODO
 CREATE TABLE Flavors (
     flavor_id SERIAL,
-    name VARCHAR(32) NOT NULL,
+    name VARCHAR(32) NOT NULL UNIQUE,
     base_price_per_scoop DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (flavor_id)
 );
@@ -165,8 +165,12 @@ BEFORE INSERT OR UPDATE ON OrderDetails
 FOR EACH ROW
 EXECUTE FUNCTION check_discount_in_range();
 
--- secondary index 
-CREATE UNIQUE INDEX flavor_index ON flavors (name);
+-- secondary indices
+CREATE UNIQUE INDEX flavor_name_index ON flavors (name); -- look up flavors by name faster
+CREATE INDEX order_tourid_index ON Orders (tours_id); -- fast lookup of orders by tour
+CREATE INDEX orderdetail_orderid_index ON OrderDetails (order_id); -- fast lookup of orderdetails by order (only part of primary key)
+CREATE INDEX warehousestoresflavor_flavorid_index ON WarehouseStoresFlavors (flavor_id); -- fast lookup of warehousestoresflavors by flavor (only part of primary key)
+CREATE INDEX vehiclestoresflavor_flavorid_index ON VehicleStoresFlavors (flavor_id); --  fast lookup of vehiclestoresflavors by flavor (only part of primary key)
 
 
 -- populate with data
