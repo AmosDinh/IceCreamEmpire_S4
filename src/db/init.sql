@@ -57,7 +57,8 @@ CREATE TABLE Flavors (
     PRIMARY KEY (flavor_id)
 );
 CREATE TABLE Contents (
-    flavor_id SERIAL,
+    content_id SERIAL,
+    flavor_id INT NOT NULL,
     calories INT NOT NULL,
     basis VARCHAR(32) NOT NULL,
     isvegan BOOLEAN GENERATED ALWAYS AS (
@@ -68,7 +69,7 @@ CREATE TABLE Contents (
     ) STORED,
     
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE,
-    PRIMARY KEY (flavor_id)
+    PRIMARY KEY (content_id)
 );
 
 -- one to one relationship, unique constraint on this total participation side
@@ -214,10 +215,10 @@ INSERT INTO Flavors (name, base_price_per_scoop)
 VALUES ('Vanilla', 1.00),
     ('Chocolate', 1.50),
     ('Strawberry', 1.25);
-INSERT INTO Contents (calories, basis)
-VALUES (200, 'milk'),
-    (250, 'milk'),
-    (225, 'water');
+INSERT INTO Contents (content_id,flavor_id, calories, basis)
+VALUES (1,1,200, 'milk'),
+    (2,2,250, 'milk'),
+    (3,3,225, 'water');
 INSERT INTO Orders (tours_id, order_datetime, payment_type)
 VALUES (1, '2023-05-10 12:30:00', 'cash'),
     (2, '2023-05-10 13:00:00', 'credit'),
