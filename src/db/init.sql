@@ -66,9 +66,14 @@ CREATE TABLE Contents (
             ELSE true
         END
     ) STORED,
-    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE ,
+    
+    FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE,
     PRIMARY KEY (flavor_id)
 );
+
+-- one to one relationship, unique constraint on this total participation side
+ALTER TABLE Contents ADD CONSTRAINT unique_flavor_id UNIQUE (flavor_id);
+
 CREATE TABLE Orders (
     order_id SERIAL,
     tours_id INT NOT NULL,
@@ -166,7 +171,7 @@ FOR EACH ROW
 EXECUTE FUNCTION check_discount_in_range();
 
 -- secondary indices
-CREATE UNIQUE INDEX flavor_name_index ON flavors (name); -- look up flavors by name faster
+CREATE INDEX flavor_name_index ON flavors (name); -- look up flavors by name faster, name not necessarily unique
 CREATE INDEX order_tourid_index ON Orders (tours_id); -- fast lookup of orders by tour
 CREATE INDEX orderdetail_orderid_index ON OrderDetails (order_id); -- fast lookup of orderdetails by order (only part of primary key)
 CREATE INDEX warehousestoresflavor_flavorid_index ON WarehouseStoresFlavors (flavor_id); -- fast lookup of warehousestoresflavors by flavor (only part of primary key)
