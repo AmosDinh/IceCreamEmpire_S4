@@ -1,14 +1,9 @@
 import streamlit as st
-# import psycopg2
-# from sqlalchemy import create_engine, Table, Column, Integer, String, ForeignKey, DateTime, MetaData, DECIMAL
-# from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import time
-# from sqlalchemy.sql import select
-# import os
-# from sqlalchemy import text
+
 
 def crudtour(db):
     engine = db.engine
@@ -24,8 +19,6 @@ def crudtour(db):
     neighborhoods = Base.classes.neighborhoods
     session = sessionmaker(bind=engine)()
 
-    # Streamlit app
-    # st.title("Ice Cream Tour Management")
 
     # Create a new tour
     st.header("Create a New Tour")

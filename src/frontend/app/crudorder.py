@@ -1,7 +1,6 @@
 import streamlit as st
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
-import os
 from datetime import datetime
 import time
 
