@@ -78,7 +78,7 @@ def main():
             x="forename",
             y="total_sales",
             title="Vendor Performance",
-            labels={"forename": "Forname", "total_sales": "Total Sales"},
+            labels={"forename": "Forename", "total_sales": "Total Sales"},
         )
         vendor_salary_data_chart = px.bar(
             vendor_salary_data,
