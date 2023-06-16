@@ -55,10 +55,6 @@ class Queries:
                     for i in range(len(r)):
                         r[i] = [v if type(v) != decimal.Decimal else round(float(v),2) for v in r[i]]
                     df = pd.DataFrame(r, columns=result.keys())
-
-                    # needed so streamlit dataframe editing works correctly
-                    #df = df.convert_dtypes()  # for some reason column with 1.12 is not recognized as numeric
-                    #df = df.apply(self.convert_to_numeric, axis=0)  # therefore use this
                     return df
                 else:
                     connection.commit()
