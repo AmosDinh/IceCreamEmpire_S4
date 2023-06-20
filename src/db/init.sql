@@ -92,7 +92,7 @@ CREATE TABLE OrderDetails (
     -- in %
     FOREIGN KEY (order_id) REFERENCES Orders (order_id) ON UPDATE CASCADE ON DELETE CASCADE ,
     FOREIGN KEY (flavor_id) REFERENCES Flavors (flavor_id) ON UPDATE CASCADE ON DELETE CASCADE ,
-     PRIMARY KEY (order_id, flavor_id)
+    PRIMARY KEY (order_id, flavor_id)
 );
 CREATE TABLE Warehouses (
    warehouse_id SERIAL,
@@ -171,12 +171,8 @@ BEFORE INSERT OR UPDATE ON OrderDetails
 FOR EACH ROW
 EXECUTE FUNCTION check_discount_in_range();
 
--- secondary indices
-CREATE INDEX flavor_name_index ON flavors (name); -- look up flavors by name faster, name not necessarily unique
-CREATE INDEX order_tourid_index ON Orders (tours_id); -- fast lookup of orders by tour
-CREATE INDEX orderdetail_orderid_index ON OrderDetails (order_id); -- fast lookup of orderdetails by order (only part of primary key)
-CREATE INDEX warehousestoresflavor_flavorid_index ON WarehouseStoresFlavors (flavor_id); -- fast lookup of warehousestoresflavors by flavor (only part of primary key)
-CREATE INDEX vehiclestoresflavor_flavorid_index ON VehicleStoresFlavors (flavor_id); --  fast lookup of vehiclestoresflavors by flavor (only part of primary key)
+-- secondary index
+CREATE INDEX order_tourid_index ON Orders USING HASH(tours_id); -- fast lookup of orders by tour for equality condition / join
 
 
 -- populate with data
