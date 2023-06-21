@@ -3,7 +3,7 @@
 ## Documentation
 
 - The documentation can be be found in [project_documentation_IceCreamEmpire.pdf](project_documentation_IceCreamEmpire.pdf)
-- The Video can be found in [IceCreamEmpire.mp4](/video/IceCreamEmpire.mp4)
+- The Video can be found in [Icecreamempire.mp4](/video/Icecreamempire.mp4)
 
 ## Run the application
 
